@@ -6,6 +6,8 @@ extends CharacterBody2D
 ## Os métodos de ataque (active_attack, attack_segment, make_hit) são o contrato usado por main.gd.
 
 signal died(fighter: Fighter)
+## Pede um efeito sonoro pelo nome (ver AudioBank e assets/audio/sfx).
+signal sfx_requested(sound: String)
 
 const HURT_SIZE := Vector2(30.0, 86.0)
 const FLASH_TIME := 0.12

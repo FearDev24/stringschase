@@ -13,6 +13,7 @@ var _elapsed := 0.0
 var _defeated := 0
 var _won := false
 var _effects: Node2D
+var audio: AudioBank
 
 
 func _ready() -> void:
@@ -24,6 +25,9 @@ func _ready() -> void:
 	mod.color = Color(0.62, 0.64, 0.82)
 	add_child(mod)
 
+	audio = AudioBank.new()
+	add_child(audio)
+
 	stage = Stage.new()
 	add_child(stage)
 
@@ -31,6 +35,7 @@ func _ready() -> void:
 	player.position = stage.player_spawn()
 	add_child(player)
 	player.died.connect(_on_player_died)
+	player.sfx_requested.connect(audio.play)
 
 	var cam := Camera2D.new()
 	cam.position_smoothing_enabled = true
@@ -48,6 +53,7 @@ func _ready() -> void:
 		hound.target = player
 		add_child(hound)
 		hound.died.connect(_on_hound_died)
+		hound.sfx_requested.connect(audio.play)
 		hounds.append(hound)
 
 	_effects = Node2D.new()
@@ -126,6 +132,8 @@ func _try_hit(attacker: Fighter, defender: Fighter) -> void:
 		attacker.on_attack_landed(data)
 		var col := Palette.GOLD_GLOW if attacker == player else Palette.CORRUPT_GLOW
 		_spawn_spark(HitUtil.contact_point(seg, box), col)
+		if attacker == player:
+			audio.play("gold_chime" if float(data.get("repeat", 0.0)) > 0.0 else "hit_metal")
 
 
 func _spawn_spark(pos: Vector2, col: Color) -> void:

@@ -163,6 +163,22 @@ func _set_state(new_state: int) -> void:
 	state_time = 0.0
 	if ATTACKS.has(new_state):
 		attack_serial += 1
+	var sound := SFX_BY_STATE.get(new_state, "") as String
+	if sound != "":
+		sfx_requested.emit(sound)
+
+
+const SFX_BY_STATE := {
+	S.ATK1: "swing_light",
+	S.ATK2: "swing_heavy",
+	S.AIR_ATK: "swing_light",
+	S.SPECIAL: "special",
+	S.JUMP: "jump",
+	S.LAND: "land",
+	S.ROLL: "roll",
+	S.HURT: "player_hurt",
+	S.DEAD: "player_die",
+}
 
 
 func _gravity(delta: float, mult: float) -> void:

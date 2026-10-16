@@ -148,6 +148,17 @@ func _set_ai(new_ai: int) -> void:
 	ai_time = 0.0
 	if new_ai == AI.LUNGE:
 		attack_serial += 1
+	var sound := SFX_BY_AI.get(new_ai, "") as String
+	if sound != "":
+		sfx_requested.emit(sound)
+
+
+## O impacto do golpe do jogador é tocado por main.gd, então o estado HURT fica sem som aqui.
+const SFX_BY_AI := {
+	AI.TELEGRAPH: "hound_telegraph",
+	AI.LUNGE: "hound_lunge",
+	AI.DEAD: "hound_die",
+}
 
 
 func _sees_player(adx: float, dy: float) -> bool:
